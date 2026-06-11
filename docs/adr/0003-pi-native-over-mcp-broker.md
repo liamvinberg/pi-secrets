@@ -4,4 +4,4 @@ An MCP "secrets broker" server could in principle serve both pi and Claude Code 
 
 ## Consequences
 
-- A Claude Code counterpart is a separate build: an MCP server using elicitation (responses stay server-side), delivery via a `CLAUDE_ENV_FILE` hook, and a PostToolUse redaction hook. It shares this design — the CONTEXT.md language and the reuse/redaction rules — but not this code.
+- A Claude Code counterpart is a separate build: an MCP server using elicitation (responses stay server-side), delivery via a `CLAUDE_ENV_FILE` hook, and a PostToolUse redaction hook. It shares this design (the CONTEXT.md language and the reuse/redaction rules) but not this code.

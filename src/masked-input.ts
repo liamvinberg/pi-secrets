@@ -8,7 +8,7 @@ const PASTE_END = "\x1b[201~";
 /**
  * Single-line masked input for ctx.ui.custom(). Renders bullets instead of the
  * value, buffers bracketed paste itself (pi-tui's Input silently strips
- * newlines on paste — here interior newlines must reject the capture instead),
+ * newlines on paste; here interior newlines must reject the capture instead),
  * and resolves with the value on Enter or undefined on Esc.
  */
 export class MaskedInput implements Component, Focusable {
@@ -72,7 +72,7 @@ export class MaskedInput implements Component, Focusable {
 			return;
 		}
 		if (data.startsWith("\x1b")) {
-			// Unhandled escape sequence (arrow keys etc.) — a masked field has no cursor movement.
+			// Unhandled escape sequence (arrow keys etc.); a masked field has no cursor movement.
 			return;
 		}
 
@@ -84,7 +84,7 @@ export class MaskedInput implements Component, Focusable {
 	}
 
 	private acceptPaste(raw: string): void {
-		// A single trailing newline is a copy artifact (pbcopy < file, terminal selection) — strip it.
+		// A single trailing newline is a copy artifact (pbcopy < file, terminal selection); strip it.
 		const content = raw.replace(/[\r\n]+$/, "");
 		if (/[\r\n]/.test(content)) {
 			this.error = "Multi-line value detected. Give the agent a file path instead, or press Esc to decline.";
@@ -101,7 +101,7 @@ export class MaskedInput implements Component, Focusable {
 			return;
 		}
 		if (value.length < MIN_SECRET_LENGTH) {
-			this.error = `Only ${value.length} characters — that looks like a paste error. Fix the value or press Esc to decline.`;
+			this.error = `Only ${value.length} characters, which looks like a paste error. Fix the value or press Esc to decline.`;
 			this.tui.requestRender();
 			return;
 		}

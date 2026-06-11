@@ -1,6 +1,6 @@
 # Secrets travel to commands via process.env, not files
 
-pi's bash tool builds its child environment from the agent's own `process.env` (`getShellEnv()` spreads it), so setting `process.env[NAME]` at capture time makes `$NAME` available in every subsequent bash command. We chose this over the obvious alternative — writing the value to a `mktemp` file the model sources or `$(cat)`s — because it leaves zero bytes on disk, needs no cleanup or permission management, dies with the process, and is inherited by child processes (subagents) for free.
+pi's bash tool builds its child environment from the agent's own `process.env` (`getShellEnv()` spreads it), so setting `process.env[NAME]` at capture time makes `$NAME` available in every subsequent bash command. We chose this over the obvious alternative (writing the value to a `mktemp` file the model sources or `$(cat)`s) because it leaves zero bytes on disk, needs no cleanup or permission management, dies with the process, and is inherited by child processes (subagents) for free.
 
 ## Consequences
 

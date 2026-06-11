@@ -97,7 +97,7 @@ export default function piSecrets(pi: ExtensionAPI) {
 			}
 
 			// Present in the inherited environment → confirm interactively; reuse silently
-			// headless (the model can already read the environment there — tracking it at
+			// headless (the model can already read the environment there; tracking it at
 			// least brings the value under redaction).
 			const inherited = process.env[name];
 			if (inherited) {
@@ -135,7 +135,7 @@ export default function piSecrets(pi: ExtensionAPI) {
 			updateStatus(ctx);
 
 			if (value.length < SHORT_SECRET_LENGTH) {
-				ctx.ui.notify(`${name} is only ${value.length} chars — redaction may over-match short strings`, "warning");
+				ctx.ui.notify(`${name} is only ${value.length} chars; redaction may over-match short strings`, "warning");
 			} else {
 				ctx.ui.notify(`Secret ${name} captured (${value.length} chars)`, "info");
 			}
@@ -157,7 +157,7 @@ export default function piSecrets(pi: ExtensionAPI) {
 		};
 	});
 
-	// User `!`/`!!` commands also enter context — scrub their streamed output too.
+	// User `!`/`!!` commands also enter context; scrub their streamed output too.
 	// Per-chunk scrubbing can miss a value split across chunk boundaries; accepted gap.
 	pi.on("user_bash", () => {
 		if (store.isEmpty()) return;
@@ -224,7 +224,7 @@ export default function piSecrets(pi: ExtensionAPI) {
 			}
 
 			const describe = (r: SecretRecord) => `${r.name} · ${r.source} · ${r.length} chars`;
-			const choice = await ctx.ui.select(`Secrets (${records.length}) — select one to clear`, [
+			const choice = await ctx.ui.select(`Secrets (${records.length}): select one to clear`, [
 				...records.map(describe),
 				"Clear all",
 				"Close",

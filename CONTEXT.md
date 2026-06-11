@@ -5,7 +5,7 @@ Secure hand-off of secrets from a human to a pi coding-agent session: the agent 
 ## Language
 
 **Secret**:
-A sensitive value (API key, token, password) owned by the human. Exists only in process memory and the process environment — never in model context, chat, or session files.
+A sensitive value (API key, token, password) owned by the human. Exists only in process memory and the process environment, never in model context, chat, or session files.
 _Avoid_: credential, key
 
 **Secret Name**:
@@ -29,5 +29,5 @@ Answering a `request_secret` call from an already-tracked Secret instead of prom
 The human refusing a request (Esc or answering no). Surfaces to the model as a tool error instructing it not to re-ask.
 
 **Redaction**:
-Replacing a Secret's value — and its base64/URL-encoded variants — with `[REDACTED:NAME]` in anything that would enter model context or session files. A backstop against accidents, not a security boundary.
+Replacing a Secret's value (and its base64/URL-encoded variants) with `[REDACTED:NAME]` in anything that would enter model context or session files. A backstop against accidents, not a security boundary.
 _Avoid_: masking (reserved for the visual bullets in the Capture prompt)
