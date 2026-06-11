@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0b1020"/>
+      <stop offset="100%" stop-color="#101828"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace; }
+    .title { font-size: 44px; font-weight: 700; fill: #e6edf3; }
+    .tagline { font-size: 21px; fill: #8b97a8; }
+    .code { font-size: 19px; }
+    .accent { fill: #7aa2f7; }
+    .muted { fill: #6b7687; }
+    .dim { fill: #515c6e; }
+    .fg { fill: #cdd6e4; }
+    .bullets { fill: #e6edf3; letter-spacing: 2px; }
+    .redacted { fill: #f7768e; }
+    .ok { fill: #9ece6a; }
+    .label { font-size: 15px; fill: #515c6e; letter-spacing: 3px; }
+  </style>
+
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <text x="80" y="92" class="title">pi-secrets</text>
+  <text x="80" y="132" class="tagline">Hand secrets to your coding agent — without putting them in its context.</text>
+
+  <!-- Terminal: the user's masked prompt -->
+  <text x="80" y="196" class="label">YOU SEE</text>
+  <rect x="80" y="212" width="1040" height="186" rx="12" fill="#161e2e" stroke="#252f44" stroke-width="1.5"/>
+  <circle cx="110" cy="240" r="7" fill="#ff5f57"/>
+  <circle cx="134" cy="240" r="7" fill="#febc2e"/>
+  <circle cx="158" cy="240" r="7" fill="#28c840"/>
+
+  <text x="112" y="284" class="code accent">Secret requested: STRIPE_API_KEY</text>
+  <text x="112" y="313" class="code muted">Reason: Needed to create a test product via the Stripe API</text>
+  <text x="112" y="348" class="code bullets">••••••••••••••••••••••••••••••••<tspan class="accent">▎</tspan><tspan class="dim" dx="8">(32 chars)</tspan></text>
+  <text x="112" y="382" class="code dim">Paste or type · Enter submit · Esc decline · Ctrl+U clear</text>
+
+  <!-- Terminal: what the model sees -->
+  <text x="80" y="456" class="label">THE MODEL SEES</text>
+  <rect x="80" y="472" width="1040" height="118" rx="12" fill="#161e2e" stroke="#252f44" stroke-width="1.5"/>
+
+  <text x="112" y="512" class="code"><tspan class="ok">✓</tspan><tspan class="fg" dx="10">Secret STRIPE_API_KEY captured (32 chars) — available as $STRIPE_API_KEY in bash</tspan></text>
+  <text x="112" y="545" class="code"><tspan class="muted">$ echo "key: $STRIPE_API_KEY"</tspan></text>
+  <text x="112" y="574" class="code"><tspan class="fg">key: </tspan><tspan class="redacted">[REDACTED:STRIPE_API_KEY]</tspan></text>
+</svg>

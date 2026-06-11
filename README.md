@@ -1,23 +1,14 @@
 # pi-secrets
 
+[![CI](https://github.com/liamvinberg/pi-secrets/actions/workflows/ci.yml/badge.svg)](https://github.com/liamvinberg/pi-secrets/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/pi-secrets)](https://www.npmjs.com/package/pi-secrets)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 A [pi](https://github.com/badlogic/pi-mono) extension for handing secrets to the agent without them ever entering the model's context window.
 
 When a task needs an API key, token, or password, the model calls the `request_secret` tool. You get a **masked prompt** in the TUI, paste the value, and the model only learns the secret's *name* and *length*. The value itself becomes an environment variable available to every subsequent `bash` command — and a redaction layer scrubs the value from all tool output as a backstop.
 
-```
-Secret requested: STRIPE_API_KEY
-Reason: Needed to create a test product via the Stripe API
-
-  ••••••••••••••••••••••••••••••••▎ (32 chars)
-
-  Paste or type · Enter submit · Esc decline · Ctrl+U clear
-```
-
-The model then sees only:
-
-```
-Secret STRIPE_API_KEY captured (32 chars). It is available as $STRIPE_API_KEY in bash commands.
-```
+![You see a masked prompt; the model sees only the name, length, and redaction markers](https://raw.githubusercontent.com/liamvinberg/pi-secrets/main/assets/preview.png)
 
 ## Install
 

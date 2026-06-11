@@ -36,7 +36,8 @@
 	"pi": {
 		"extensions": [
 			"./src/index.ts"
-		]
+		],
+		"image": "https://raw.githubusercontent.com/liamvinberg/pi-secrets/main/assets/preview.png"
 	},
 	"peerDependencies": {
 		"@earendil-works/pi-coding-agent": "*",
