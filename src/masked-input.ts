@@ -8,9 +8,10 @@ const PASTE_END = "\x1b[201~";
 
 /**
  * Single-line masked input for ctx.ui.custom(). Renders bullets instead of the
- * value, buffers bracketed paste itself (pi-tui's Input silently strips
- * newlines on paste; here interior newlines must reject the capture instead),
- * and resolves with the value on Enter or undefined on Esc.
+ * value (Tab toggles between masked and revealed), buffers bracketed paste
+ * itself (pi-tui's Input silently strips newlines on paste; here interior
+ * newlines must reject the capture instead), and resolves with the value on
+ * Enter or undefined on Esc.
  */
 export class MaskedInput implements Component, Focusable {
 	focused = false;
@@ -18,6 +19,7 @@ export class MaskedInput implements Component, Focusable {
 	private value = "";
 	private pasteBuffer = "";
 	private inPaste = false;
+	private revealed = false;
 	private error: string | undefined;
 
 	constructor(
@@ -72,6 +74,11 @@ export class MaskedInput implements Component, Focusable {
 			this.tui.requestRender();
 			return;
 		}
+		if (matchesKey(data, Key.tab)) {
+			this.revealed = !this.revealed;
+			this.tui.requestRender();
+			return;
+		}
 		if (data.startsWith("\x1b")) {
 			// Unhandled escape sequence (arrow keys etc.); a masked field has no cursor movement.
 			return;
@@ -118,19 +125,21 @@ export class MaskedInput implements Component, Focusable {
 
 		const cursor = this.focused ? t.fg("accent", "▎") : " ";
 		const countText = t.fg("dim", ` (${this.value.length} chars)`);
-		const bulletBudget = remainingVisibleWidth(width, "  ", cursor, countText);
-		const bullets = "•".repeat(Math.min(this.value.length, bulletBudget));
+		const valueWidth = remainingVisibleWidth(width, "  ", cursor, countText);
+		const valueSegment = this.revealed
+			? t.fg("dim", fitLineToWidth(this.value, valueWidth))
+			: "•".repeat(Math.min(this.value.length, valueWidth));
 		const lines = [
 			...wrap(t.fg("accent", `Secret requested: ${this.name}`)),
 			...wrap(t.fg("muted", `Reason: ${this.reason}`)),
 			"",
-			fit(`  ${bullets}${cursor}${countText}`),
+			fit(`  ${valueSegment}${cursor}${countText}`),
 			"",
 		];
 		if (this.error) {
 			lines.push(...wrap(t.fg("error", `  ${this.error}`)), "");
 		}
-		lines.push(fit(t.fg("muted", "  Paste or type · Enter submit · Esc decline · Ctrl+U clear")));
+		lines.push(fit(t.fg("muted", "  Paste or type · Tab reveal/hide · Enter submit · Esc decline · Ctrl+U clear")));
 		return lines;
 	}
 

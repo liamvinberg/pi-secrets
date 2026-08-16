@@ -1,6 +1,6 @@
 {
 	"name": "pi-secrets",
-	"version": "0.1.1",
+	"version": "0.2.0",
 	"description": "Pi extension: the agent requests secrets via a masked local prompt. Values become env vars for bash, never enter the model context, and are redacted from tool output.",
 	"type": "module",
 	"keywords": [

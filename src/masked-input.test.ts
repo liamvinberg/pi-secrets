@@ -41,3 +41,54 @@ describe("MaskedInput render", () => {
 		expectFits(input.render(24), 24);
 	});
 });
+
+describe("MaskedInput reveal toggle", () => {
+	const makeInput = (value = "") => {
+		const input = new MaskedInput("TOKEN", "short reason", noopTui, ansiTheme, () => {});
+		input.focused = true;
+		if (value) input.handleInput(value);
+		return input;
+	};
+
+	test("Tab toggles between masked bullets and revealed value", () => {
+		const input = makeInput("s3cret");
+
+		const masked = input.render(40);
+		expect(masked.some((l) => l.includes("••••••"))).toBe(true);
+		expect(masked.some((l) => l.includes("s3cret"))).toBe(false);
+
+		input.handleInput("\t");
+		const revealed = input.render(40);
+		expect(revealed.some((l) => l.includes("s3cret"))).toBe(true);
+		expect(revealed.some((l) => l.includes("••••••"))).toBe(false);
+
+		input.handleInput("\t");
+		const reMasked = input.render(40);
+		expect(reMasked.some((l) => l.includes("••••••"))).toBe(true);
+		expect(reMasked.some((l) => l.includes("s3cret"))).toBe(false);
+	});
+
+	test("Tab does not append to the value", () => {
+		const input = makeInput("abc");
+		input.handleInput("\t");
+		input.handleInput("d");
+
+		const lines = input.render(40);
+		expect(lines.some((l) => l.includes("(4 chars)"))).toBe(true);
+		expect(lines.some((l) => l.includes("(5 chars)"))).toBe(false);
+	});
+
+	test("revealed render of a long value still fits the width", () => {
+		const input = makeInput("x".repeat(200));
+		input.handleInput("\t");
+
+		expectFits(input.render(24), 24);
+	});
+
+	test("footer hint advertises the Tab toggle", () => {
+		const input = makeInput("abc");
+
+		const lines = input.render(60);
+		expect(lines.some((l) => l.includes("Tab reveal/hide"))).toBe(true);
+	});
+});
