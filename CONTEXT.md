@@ -25,6 +25,9 @@ A Secret a child pi process (e.g. a subagent) rebuilt from `PI_SECRETS_NAMES` pl
 **Reuse**:
 Answering a `request_secret` call from an already-tracked Secret instead of prompting. Silent for Captured and Seeded Secrets; requires confirmation for Inherited Secrets.
 
+**Queued Capture**:
+A Capture that waits for an earlier prompt to finish. `request_secret` declares sequential execution, so several requests the model issues in one turn become successive prompts instead of overwriting each other.
+
 **Decline**:
 The human refusing a request (Esc or answering no). Surfaces to the model as a tool error instructing it not to re-ask.
 

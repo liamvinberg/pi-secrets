@@ -83,6 +83,12 @@ export default function piSecrets(pi: ExtensionAPI) {
 			"After request_secret succeeds, use the secret strictly via its environment variable (e.g. $STRIPE_API_KEY) in bash; never print or echo its value.",
 		],
 		parameters: requestSecretParams,
+		// The TUI has a single custom-component slot, so overlapping prompts destroy
+		// each other: the second `ctx.ui.custom()` replaces the first component, whose
+		// promise then never settles and leaves the turn hanging with that secret
+		// uncaptured. Sequential mode makes pi await this tool call before starting the
+		// next one in the batch, so parallel requests become successive prompts.
+		executionMode: "sequential",
 
 		async execute(_toolCallId, params, _signal, _onUpdate, ctx) {
 			const name = params.name.trim();

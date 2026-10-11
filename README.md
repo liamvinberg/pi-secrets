@@ -35,6 +35,10 @@ Or try it ephemerally: `pi -e npm:pi-secrets`
 | Nothing anywhere, headless | Tool errors with guidance to export the variable or run interactively |
 | You press Esc / decline | Tool errors telling the model not to re-ask |
 
+### Several secrets in one turn
+
+`request_secret` declares sequential execution, so when the model asks for several secrets in the same message the prompts are **queued**: you answer one, then the next appears. pi's TUI has a single custom-component slot, and two prompts opened at once would replace each other — the displaced prompt could never resolve, and the turn would hang with that secret uncaptured.
+
 ### Lifetime
 
 Secrets live for the **pi process lifetime**: they survive session switches (`/new`), and vanish when pi exits. Nothing persists to disk. After a restart the model simply asks again.
