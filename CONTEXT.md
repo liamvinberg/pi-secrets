@@ -23,7 +23,10 @@ A value already present in the shell environment when pi started. Becomes tracke
 A Secret a child pi process (e.g. a subagent) rebuilt from `PI_SECRETS_NAMES` plus its inherited environment, so Redaction follows Secrets across process boundaries.
 
 **Reuse**:
-Answering a `request_secret` call from an already-tracked Secret instead of prompting. Silent for Captured and Seeded Secrets; requires confirmation for Inherited Secrets.
+Answering a `request_secret` call from an already-tracked Secret instead of prompting. Silent for Captured and Seeded Secrets; requires confirmation for Inherited Secrets. The result names `refresh: true` as the way to replace the value.
+
+**Refresh**:
+A `request_secret` call with `refresh: true`. Any held value for the name is discarded (the environment variable too, for Captured Secrets) and the Capture prompt is shown again. Intended for a value that turned out to be wrong, mispasted, or rejected by the service.
 
 **Decline**:
 The human refusing a request (Esc or answering no). Surfaces to the model as a tool error instructing it not to re-ask.

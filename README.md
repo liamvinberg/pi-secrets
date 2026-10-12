@@ -20,7 +20,7 @@ Or try it ephemerally: `pi -e npm:pi-secrets`
 
 ## How it works
 
-1. **Capture**: `request_secret({ name, reason })` pops a masked single-line input. The value goes straight into the agent process's memory; nothing is written to disk, chat, or session files.
+1. **Capture**: `request_secret({ name, reason })` pops a masked single-line input. The value goes straight into the agent process's memory; nothing is written to disk, chat, or session files. Pass `refresh: true` when a previously captured value turned out to be wrong or stale: the held value is discarded and the prompt is shown again.
 2. **Delivery**: pi's bash tool builds its child environment from the agent's `process.env`, so the captured value is available as `$NAME` in every subsequent command. Need it in a file? The model runs `echo "NAME=$NAME" >> .env`, still without seeing the value.
 3. **Redaction**: every tool result (and `!` user-bash output) is scrubbed before it reaches the model or the session file: the exact value plus its base64 and URL-encoded variants are replaced with `[REDACTED:NAME]`. If the model runs `echo $NAME`, it sees the redaction marker, not the secret.
 4. **Subagents**: child pi processes inherit the environment. `PI_SECRETS_NAMES` carries the *names* (never values), so a child running this extension rebuilds its own redaction map.
@@ -31,9 +31,12 @@ Or try it ephemerally: `pi -e npm:pi-secrets`
 |---|---|
 | Name already captured this process | Silent reuse; the model is told it's available |
 | Name in your shell environment at pi startup | Confirm dialog; allowing also registers the value for redaction |
+| `refresh: true` passed | Any held value is discarded (the env var too, for captured ones) and the masked prompt is shown again |
 | Name in environment, headless (`pi -p`) | Silent reuse + redaction (the model could read the env there anyway) |
 | Nothing anywhere, headless | Tool errors with guidance to export the variable or run interactively |
 | You press Esc / decline | Tool errors telling the model not to re-ask |
+
+A reuse result also names the way out: it tells the model to call `request_secret` again with `refresh: true` if the value it already holds is wrong or was rejected, so a failing credential does not push it into asking for the same secret under a new variable name.
 
 ### Lifetime
 
